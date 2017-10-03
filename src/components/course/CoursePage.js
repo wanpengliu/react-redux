@@ -22,7 +22,7 @@ class CoursePage extends React.Component {
     }
 
     onClickSave() {
-        this.props.dispatch(courseActions.createCourse(this.state.course));
+        this.props.createCourse(this.state.course);
 
         // 3 different ways to dispatch actions
         // 1st this.props.dispatch (courseActions.createCourse(this.state.courses));
@@ -53,16 +53,24 @@ class CoursePage extends React.Component {
 }
 
 CoursePage.propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    courses: PropTypes.array.isRequired
+
+    courses: PropTypes.array.isRequired,
+    createCourse: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
-    debugger;
     return {
         courses: state.courses //second courses is determined by the name used in reducer !!! see courseReducer.js and rootReducer import name
         //ownprops used for routing props
         // this is returning a new object with key courses and value as array from redux store 
     };
 }
-export default connect(mapStateToProps)(CoursePage);
+
+function mapDispatchToProps(dispatch) {
+    return {
+        createCourse: course => dispatch(courseActions.createCourse(course))
+        //needs to be wrapped in dispath otherwise will just call action and return an object
+        //with dispatch it will hit reducer
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(CoursePage);
